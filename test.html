@@ -116,9 +116,9 @@
       /** @type {HTMLInputElement} */
 
 
-      const title = title_input.disabled ? undefined : title_input.value;
-      const text = text_input.disabled ? undefined : text_input.value;
-      const url = url_input.disabled ? undefined : url_input.value;
+      const title = title_input.disabled ? null : title_input.value;
+      const text = text_input.disabled ? null : text_input.value;
+      const url = url_input.disabled ? null : url_input.value;
 
 
       setShareButtonsEnabled(false);
