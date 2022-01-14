@@ -1,0 +1,169 @@
+<html class=" bdbvbzeiv idc0_335"><head>
+    <title>
+      Web Share Test
+    </title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+    .error {
+      color: #d22;
+    }
+    input[type="button"] {
+        height: 30px
+    }
+    </style>
+  </head>
+  <body class="vsc-initialized">
+    <h1>
+      Web Share Test
+    </h1>
+    <table>
+      <tbody><tr>
+        <td>
+          Title:
+        </td>
+        <td>
+          <input type="checkbox" id="title_checkbox" checked="">
+        </td>
+        <td>
+          <input id="title" value="The Title" size="40">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Text:
+        </td>
+        <td>
+          <input type="checkbox" id="text_checkbox" checked="">
+        </td>
+        <td>
+          <input id="text" value="The message" size="40">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          URL:
+        </td>
+        <td>
+          <input type="checkbox" id="url_checkbox" checked="">
+        </td>
+        <td>
+          <input id="url" value="https://example.com" size="40">
+        </td>
+      </tr>
+    </tbody></table>
+    <p>
+      <input id="share" type="button" value="Share" > <input id="share-no-gesture" type="button" value="Share without user gesture" disabled="">
+    </p>
+    <div id="output"><p class="error">Error: You need to use a browser that supports this draft proposal.</p></div>
+    <p>
+      This is a test page for the <a href="https://w3c.github.io/web-share/">Web Share API</a>, demonstrating
+      <a href="https://w3c.github.io/web-share/#dom-sharedata-files">file</a>
+      sharing. It only works in browsers that have implemented file sharing.
+    </p>
+    <script>
+    'use strict';
+
+    function sleep(delay) {
+      return new Promise(resolve => {
+        setTimeout(resolve, delay);
+      });
+    }
+
+    function logText(message, isError) {
+      if (isError)
+        console.error(message);
+      else
+        console.log(message);
+
+      const p = document.createElement('p');
+      if (isError)
+        p.setAttribute('class', 'error');
+      document.querySelector('#output').appendChild(p);
+      p.appendChild(document.createTextNode(message));
+    }
+
+    function logError(message) {
+      logText(message, true);
+    }
+
+    function setShareButtonsEnabled(enabled) {
+      document.querySelector('#share').disabled = !enabled;
+      document.querySelector('#share-no-gesture').disabled = !enabled;
+    }
+
+    function checkboxChanged(e) {
+      const checkbox = e.target;
+      const textfield = document.querySelector('#' + checkbox.id.split('_')[0]);
+
+      textfield.disabled = !checkbox.checked;
+      if (!checkbox.checked)
+        textfield.value = '';
+    }
+
+    function checkBasicFileShare() {
+      // XXX: There is no straightforward API to do this.
+      // For now, assume that text/plain is supported everywhere.
+      const txt = new Blob(['Hello, world!'], {type: 'text/plain'});
+      // XXX: Blob support? https://github.com/w3c/web-share/issues/181
+      const file = new File([txt], "test.txt");
+      return navigator.canShare({ files: [file] });
+    }
+
+    async function testWebShare() {
+      const title_input = document.querySelector('#title');
+      const text_input = document.querySelector('#text');
+      const url_input = document.querySelector('#url');
+      /** @type {HTMLInputElement} */
+
+
+      const title = title_input.disabled ? undefined : title_input.value;
+      const text = text_input.disabled ? undefined : text_input.value;
+      const url = url_input.disabled ? undefined : url_input.value;
+
+
+      setShareButtonsEnabled(false);
+      if ('Android' in window) {
+         try {
+        Android.nativeShare(title, text, url)
+        } catch (error) {
+          logError('Error sharing: ' + error);
+        }
+         setShareButtonsEnabled(true);
+        return
+      }
+      try {
+        await navigator.share({ title, text, url});
+        logText('Successfully sent share');
+      } catch (error) {
+        logError('Error sharing: ' + error);
+      }
+      setShareButtonsEnabled(true);
+    }
+
+    async function testWebShareDelay() {
+      setShareButtonsEnabled(false);
+      await sleep(6000);
+      testWebShare();
+    }
+
+    function onLoad() {
+      // Checkboxes disable and delete textfields.
+      document.querySelector('#title_checkbox').addEventListener('click',
+          checkboxChanged);
+      document.querySelector('#text_checkbox').addEventListener('click',
+          checkboxChanged);
+      document.querySelector('#url_checkbox').addEventListener('click',
+          checkboxChanged);
+
+      document.querySelector('#share').addEventListener('click', testWebShare);
+      document.querySelector('#share-no-gesture').addEventListener('click',
+          testWebShareDelay);
+			
+
+    }
+
+    window.addEventListener('load', onLoad);
+    </script>
+  
+
+</body></html>
