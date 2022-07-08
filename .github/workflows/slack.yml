@@ -25,7 +25,7 @@ jobs:
        - name: test user name
          run: |
            if [ "${{secrets[steps.get-user-name.outputs.NAME]}}" != "" ]; then
-            echo "DEFAULT_TARGET=<${{secrets[steps.get-user-name.outputs.NAME]}}>" >> $GITHUB_ENV
+            echo "DEFAULT_TARGET=<@${{secrets[steps.get-user-name.outputs.NAME]}}>" >> $GITHUB_ENV
            fi
        - name: check env
          run: echo "${{env.DEFAULT_TARGET}}"
