@@ -16,10 +16,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
+       - name: check env
+         run: echo "${{env.DEFAULT_TARGET}}"
        - name: test user name
          if: github.actor == 'chief-tim'
          run: echo "DEFAULT_TARGET=<${{ secrets.SLACK_SERVICE_URL  }}>" >> $GITHUB_ENV
+       - name: check env
+         run: echo "${{env.DEFAULT_TARGET}}"
        - name: send slack message
          uses: slackapi/slack-github-action@v1.19.0
          with:
@@ -34,5 +38,6 @@ jobs:
             # payload-file-path: # optional
          env:
           SLACK_WEBHOOK_URL : ${{ secrets.SLACK_SERVICE_URL }}
-          DEFAULT_TARGET : "@here"
+    env:
+     DEFAULT_TARGET : "@here"
         
