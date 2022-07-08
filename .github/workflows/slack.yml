@@ -17,11 +17,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-       - name: test user name 
-          if: github.actor == 'chief-tim'
-          run: |
-          echo "DEFAULT_TARGET=<${{ secrets.CHIEF_TIM }}>" >> $GITHUB_ENV
-      - uses: slackapi/slack-github-action@v1.19.0
+
+      - name: send slack message
+        uses: slackapi/slack-github-action@v1.19.0
         with:
             # Slack channel ID where message will be posted. Needed if using bot token
             # channel-id: C03NNTK1U69
