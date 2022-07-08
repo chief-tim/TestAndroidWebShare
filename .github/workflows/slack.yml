@@ -23,7 +23,9 @@ jobs:
        - name: check output
          run: echo "${{steps.get-user-name.outputs.NAME}}"
        - name: get slack name
-         run:  echo "USERNAME=${{secrets[steps.get-user-name.outputs.NAME]}}" >> $GITHUB_ENV 
+         run:  echo "USERNAME=${{secrets[env.github-name]}}" >> $GITHUB_ENV 
+         env:
+          github-name: ${{ steps.get-user-name.outputs.NAME }}
        - name: check username
          run: echo "${{env.USERNAME}}"
        - name: test user name
