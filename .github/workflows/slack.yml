@@ -19,10 +19,17 @@ jobs:
       - uses: slackapi/slack-github-action@v1.19.0
         with:
             # Slack channel ID where message will be posted. Needed if using bot token
-            channel-id: C03NNTK1U69
+            # channel-id: C03NNTK1U69
             # Message to post into Slack. Needed if using bot token
-            slack-message: "test"
+            # slack-message: "test"
             # JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead
-            # payload: # optional
+            payload: |
+              {
+                "message": "test",
+                "foo": "bar"
+              }
             # path to JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead. If payload is provided, it will take preference over this field
             # payload-file-path: # optional
+        env:
+          SLACK_WEBHOOK_URL : "https://hooks.slack.com/workflows/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"
+        
