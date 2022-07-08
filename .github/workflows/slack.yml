@@ -20,7 +20,7 @@ jobs:
        - name: echo target
          run:  echo "USERNAME=${{secrets[github.actor]}}" >> $GITHUB_ENV
        - name: test user name
-         if: ${{env.USERNAME}} != NULL 
+         if: ${{env.USERNAME}} != ''
          run: echo "DEFAULT_TARGET=<${{ env.USERNAME  }}>" >> $GITHUB_ENV
        - name: check env
          run: echo "${{env.DEFAULT_TARGET}}"
