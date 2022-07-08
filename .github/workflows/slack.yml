@@ -19,8 +19,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
        - name: echo target
          run: |
-           echo  "NAME = $( echo ${{github.actor}} | tr "a-z" "A-Z")" >> $GITHUB_ENV 
-           echo " USERNAME=${{secrets[env.NAME]}}" >> $GITHUB_ENV"
+           echo  "NAME = $( echo ${{github.actor}} | tr 'a-z' 'A-Z')" >> $GITHUB_ENV 
+           echo " USERNAME=${{secrets[env.NAME]}}" >> $GITHUB_ENV
        - name: test user name
          run: |
            if [ "$USERNAME" == "" ]; then
