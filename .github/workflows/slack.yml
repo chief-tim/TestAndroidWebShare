@@ -21,7 +21,7 @@ jobs:
          run: echo "${{env.DEFAULT_TARGET}}"
        - name: test user name
          if: github.actor == 'chief-tim'
-         run: echo "DEFAULT_TARGET=<${{ secrets.SLACK_SERVICE_URL  }}>" >> $GITHUB_ENV
+         run: echo "DEFAULT_TARGET=<${{ secrets.CHIEF_TIM  }}>" >> $GITHUB_ENV
        - name: check env
          run: echo "${{env.DEFAULT_TARGET}}"
        - name: send slack message
