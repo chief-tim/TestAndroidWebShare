@@ -20,6 +20,7 @@ jobs:
        - name: echo target
          run: |
            echo  "NAME = $( echo ${{github.actor}} | tr 'a-z' 'A-Z')" >> $GITHUB_ENV 
+           echo "${{env.NAME}}"
            echo " USERNAME=${{secrets[env.NAME]}}" >> $GITHUB_ENV
        - name: test user name
          run: |
