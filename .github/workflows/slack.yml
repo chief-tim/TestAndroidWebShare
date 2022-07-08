@@ -17,12 +17,15 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
-       - name: echo target
-         run: |
-           NAME = $( echo ${{github.actor}} | tr 'a-z' 'A-Z') 
-           echo "$NAME"
-           echo "NAME = $NAME" >> $GITHUB_ENV
-           echo " USERNAME=${{secrets[env.NAME]}}" >> $GITHUB_ENV
+       - name: get user name
+         run:  echo "::set-output name=NAME::$( echo ${{github.actor}} | tr 'a-z' 'A-Z') "
+         id: get-user-name
+       - name: check output
+         run: echo "${{steps.get-user-name.outputs.NAME}}"
+       - name: get slack name
+         run:  echo "USERNAME=${{secrets[steps.get-user-name.outputs.NAME]}}" >> $GITHUB_ENV 
+       - name: check username
+         run: echo "${{env.USERNAME}}"
        - name: test user name
          run: |
            if [ "$USERNAME" == "" ]; then
