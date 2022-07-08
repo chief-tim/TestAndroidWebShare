@@ -18,7 +18,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
        - name: get user name
-         run:  echo "${::set-output name=NAME::$( echo ${{github.actor}} | tr 'a-z' 'A-Z')//-/_}"
+         run:  echo "::set-output name=NAME::$( echo ${{github.actor}} | tr 'a-z' 'A-Z' | tr '-' '_')"
          id: get-user-name
        - name: check output
          run: echo "${{steps.get-user-name.outputs.NAME}}"
