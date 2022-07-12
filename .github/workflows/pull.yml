@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches:
+      - "main"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    if: ((github.event.action == 'closed' && github.event.pull_request.merged == true))
+    environment: test
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
+       - name: get user name
+         run:  echo "::set-output name=NAME::$( echo ${{github.actor}} | tr 'a-z' 'A-Z' | tr '-' '_')"
+         id: get-user-name
+#        - name: check output
+#          run: echo "${{steps.get-user-name.outputs.NAME}}"
+       - name: test user name
+         run: |
+           if [ "${{secrets[steps.get-user-name.outputs.NAME]}}" != "" ]; then
+            echo "DEFAULT_TARGET=<@${{secrets[steps.get-user-name.outputs.NAME]}}>" >> $GITHUB_ENV
+           fi
+       - name: check env
+         run: echo "${{env.DEFAULT_TARGET}}"
+       - name: send slack message
+         uses: slackapi/slack-github-action@v1.19.0
+         with:
+            # Slack channel ID where message will be posted. Needed if using bot token
+            # channel-id: C03NNTK1U69
+            # Message to post into Slack. Needed if using bot token
+            # slack-message: "test"
+            # JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead
+            payload: |
+              {"channel": "#test-github-action", "username": "webhookbot", "text": "This is posted to #test-github-action and comes from a bot named webhookbot. ${{ env.DEFAULT_TARGET}} <${{github.event.url}}|${{github.event.title}}>", "icon_emoji": ":ghost:"}
+            # path to JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead. If payload is provided, it will take preference over this field
+            # payload-file-path: # optional
+         env:
+          SLACK_WEBHOOK_URL : ${{ secrets.SLACK_SERVICE_URL }}
+    env:
+     DEFAULT_TARGET : "@here"
+        
