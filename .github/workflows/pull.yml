@@ -42,7 +42,7 @@ jobs:
             # slack-message: "test"
             # JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead
             payload: |
-              {"channel": "#test-github-action", "username": "webhookbot", "text": "This is posted to #test-github-action and comes from a bot named webhookbot. ${{ env.DEFAULT_TARGET}} <${{github.event.url}}|${{github.event.title}}>", "icon_emoji": ":ghost:"}
+              {"channel": "#test-github-action", "username": "webhookbot", "text": "This is posted to #test-github-action and comes from a bot named webhookbot. ${{ env.DEFAULT_TARGET}} <${{github.event.pull_request.url}}|${{github.event.pull_request.title}}>", "icon_emoji": ":ghost:"}
             # path to JSON payload to send to Slack if webhook route. If not supplied, json from GitHub event will be sent instead. If payload is provided, it will take preference over this field
             # payload-file-path: # optional
          env:
