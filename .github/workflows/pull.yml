@@ -47,5 +47,5 @@ jobs:
          env:
           SLACK_WEBHOOK_URL : ${{ secrets.SLACK_SERVICE_URL }}
     env:
-     DEFAULT_TARGET : "@here"
+     DEFAULT_TARGET : ""
         
