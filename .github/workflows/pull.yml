@@ -46,6 +46,4 @@ jobs:
             # payload-file-path: # optional
          env:
           SLACK_WEBHOOK_URL : ${{ secrets.SLACK_SERVICE_URL }}
-    env:
-     DEFAULT_TARGET : ""
         
